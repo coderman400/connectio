@@ -106,4 +106,57 @@ button {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 115, 177, 0.2);
 }
+  
+#start:disabled {
+    background-color: #a0aec0;
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+.counter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 15px;
+}
+  
+.counter {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0073b1;
+}
+  
+.counter-label {
+    font-size: 14px;
+    color: #718096;
+}
+  
+.progress-container {
+    width: 100%;
+    background-color: #e2e8f0;
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+  
+.progress-bar {
+    height: 100%;
+    background-color: #0073b1;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+  
+.actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hidden {
+    display: none;
+}
     

@@ -11,29 +11,38 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="logo">
-        <h1>Connectio</h1>
-      </div>
-    </div>
-    
-    <div class="content">
-      <div class="status">
-        <i class="fa-solid fa-truck-fast status-icon"></i>
-        <p class="status-text">Ready to send requests</p>
+    <div class="container">
+      <div class="header">
+        <div class="logo">
+          <i class="fa-solid fa-network-wired logo-icon"></i>
+          <h1>Connectio</h1>
+        </div>
       </div>
       
-      <div class="actions">
-        <button id="start">
-        <i class="fa-solid fa-paper-plane"></i>
-          Connect Now
-        </button>
+      <div class="content">
+        <div class="status">
+          <i class="fa-solid fa-truck-fast status-icon" id="status-icon"></i>
+          <p class="status-text" id="status-text">Ready to send requests</p>
+          
+          <div class="counter-container hidden" id="counter-container">
+            <div class="counter" id="connection-counter">0</div>
+            <div class="counter-label">connections remaining</div>
+          </div>
+          
+          <div class="progress-container hidden" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+        </div>
+        
+        <div class="actions">
+          <button id="start">
+            <i class="fa-solid fa-paper-plane"></i>
+            Connect Now
+          </button>
+        </div>
       </div>
     </div>
     
-  </div>
-  
-  <script src="popup.js"></script>
+    <script src="popup.js"></script>
 </body>
 </html>
