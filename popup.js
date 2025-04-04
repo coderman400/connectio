@@ -1,4 +1,6 @@
 let isRunning = false;
+
+//UI object to easily perform updates and resets to the DOM elements
 const UI = {
   startButton: document.getElementById('start'),
   statusText: document.getElementById('status-text'),
@@ -8,6 +10,7 @@ const UI = {
   progressContainer: document.getElementById('progress-container'),
   progressBar: document.getElementById('progress-bar'),
 
+  //method to reset to the default state
   reset() {
     this.statusText.textContent = 'Ready to send requests';
     this.statusIcon.className = 'fa-solid fa-truck-fast status-icon';
@@ -18,23 +21,28 @@ const UI = {
     this.progressBar.style.width = '0%';
   },
 
+  //updating the no. of remaining connections + progressbar
   update(remaining, total) {
     this.connectionCounter.textContent = remaining;
     this.progressBar.style.width = `${((total - remaining)/total)*100}%`;
   },
 
+  //setting current status text/icon, like "Sending requests.."
   setStatus(text, icon) {
     this.statusText.textContent = text;
     this.statusIcon.className = `fa-solid ${icon} status-icon`;
   }
 };
 
+//start content injection + connection requests
 async function startProcess() {
   if (isRunning) return;
+  //set flag 
   isRunning = true;
   UI.startButton.disabled = true;
   UI.setStatus('Injecting script...', 'fa-cloud-arrow-up');
 
+  //inject the content.js script into the current active chrome tab
   try {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
     if (!tab) throw new Error('No active tab');
@@ -44,6 +52,7 @@ async function startProcess() {
       files: ['content.js']
     });
 
+    //after injection, call the findConnections message in the script which will find all connect buttons
     UI.setStatus('Finding connections...', 'fa-magnifying-glass');
     const response = await chrome.tabs.sendMessage(tab.id, {action: 'findConnections'});
     
@@ -52,6 +61,7 @@ async function startProcess() {
       return;
     }
 
+    //once we have a list of connect buttons, we start sending requests. 
     UI.counterContainer.classList.remove('hidden');
     UI.progressContainer.classList.remove('hidden');
     UI.setStatus('Sending requests...', 'fa-paper-plane');
@@ -68,7 +78,7 @@ async function startProcess() {
     isRunning = false;
   }
 }
-
+//on completion, set status accordingly and enable start button
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action === 'connectionUpdate') {
     UI.update(msg.remaining, msg.total);
@@ -80,6 +90,7 @@ chrome.runtime.onMessage.addListener((msg) => {
   return true;
 });
 
+//when the DOM fully loads, set up listener for the start button to execute the script
 document.addEventListener('DOMContentLoaded', () => {
   UI.reset();
   UI.startButton.addEventListener('click', startProcess);

@@ -3,9 +3,6 @@
     "name": "Connectio",
     "description": "Connects with all users on your LinkedIn Search results",
     "version": "1.0",
-    "background": {
-      "service_worker": "connect.js"
-    },
     "action": {
         "default_title": "Click to start connecting!",
         "default_popup": "popup.html"
