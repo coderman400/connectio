@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "getConnectButtons") {
+    if (request.action === "clickConnectButtons") {
 
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const activeTab = tabs[0];
