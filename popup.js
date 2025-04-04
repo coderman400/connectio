@@ -39,13 +39,11 @@ async function startProcess() {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
     if (!tab) throw new Error('No active tab');
     
-    // Always inject first
     await chrome.scripting.executeScript({
       target: {tabId: tab.id},
       files: ['content.js']
     });
 
-    // Now handle connections
     UI.setStatus('Finding connections...', 'fa-magnifying-glass');
     const response = await chrome.tabs.sendMessage(tab.id, {action: 'findConnections'});
     
@@ -57,6 +55,7 @@ async function startProcess() {
     UI.counterContainer.classList.remove('hidden');
     UI.progressContainer.classList.remove('hidden');
     UI.setStatus('Sending requests...', 'fa-paper-plane');
+    UI.startButton.disabled = true
     UI.update(response.count, response.count);
     
     await chrome.tabs.sendMessage(tab.id, {action: 'startConnections'});
@@ -64,9 +63,9 @@ async function startProcess() {
   } catch (error) {
     console.error('Process failed:', error);
     UI.setStatus(`Error: ${error.message}`, 'fa-triangle-exclamation');
+    UI.startButton.disabled = false
   } finally {
     isRunning = false;
-    UI.startButton.disabled = false;
   }
 }
 
@@ -75,6 +74,7 @@ chrome.runtime.onMessage.addListener((msg) => {
     UI.update(msg.remaining, msg.total);
     if (msg.remaining === 0) {
       UI.setStatus('Completed!', 'fa-check');
+      UI.startButton.disabled = false
     }
   }
   return true;
