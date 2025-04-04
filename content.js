@@ -15,7 +15,7 @@ function findConnectButtons() {
     });
     totalConnections = connectButtons.length;
     remainingConnections = totalConnections;
-    return totalConnections;
+    return remainingConnections;
 }
 
 function sendUpdateToPopup() {
@@ -67,15 +67,29 @@ function stopConnections() {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log("Content script received message:", message); // Good for debugging
+
+    if (message.action === 'ping') {
+        console.log("Ponging back!");
+        sendResponse({ status: 'ready' });
+        return true; // Keep channel open for async response
+    }
+
     if (message.action === 'findConnections') {
         const count = findConnectButtons();
+        console.log(`Found ${count} buttons`);
         sendResponse({ count: count });
-        return true;
+        // Note: If findConnectButtons itself could take time or rely on async
+        // operations not shown here, you might need to make this listener async
+        // and use await, returning true immediately. For simple DOM querying,
+        // it's likely fine.
+        return true; // Indicate you might send an async response (good practice)
     }
-    
+
     if (message.action === 'startConnections') {
-        clickConnectButtons();
+        console.log("Starting connections process...");
+        clickConnectButtons(); // This is async itself
         sendResponse({ status: 'started' });
-        return true;
+        return true; // Indicate async work started
     }
 });
