@@ -56,7 +56,7 @@ async function clickConnectButtons() {
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             //find the connect button and click it. 
-            const dismissBtn = document.querySelector('[aria-label="Dismiss"]');
+            const dismissBtn = document.querySelector('[aria-label="Send without a note"]');
             if (dismissBtn) {
                 dismissBtn.click();
                 console.log(`clicked ${index + 1}`);
